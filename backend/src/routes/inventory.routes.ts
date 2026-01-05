@@ -1,0 +1,27 @@
+import { Router, type IRouter } from "express";
+
+
+
+const inventoryRouterConfig = Object.freeze({
+  createMenu: '/createMenu',
+  addCategory: '/addCategory',
+  editCategory: '/editCategory',
+  deleteCategory: '/deleteCategory',
+
+  addItem: '/addItem',
+  editItem: '/editItem',
+  deleteItem: '/deleteItem',
+
+})
+
+export const inventoryRouter: IRouter = Router();
+
+inventoryRouter.route(`${inventoryRouterConfig.createMenu}`)
+inventoryRouter.route(`${inventoryRouterConfig.addCategory}`)
+inventoryRouter.route(`${inventoryRouterConfig.editCategory}`)
+inventoryRouter.route(`${inventoryRouterConfig.deleteCategory}`)
+inventoryRouter.route(`${inventoryRouterConfig.addItem}`)
+inventoryRouter.route(`${inventoryRouterConfig.editItem}`)
+inventoryRouter.route(`${inventoryRouterConfig.deleteItem}`)
+
+

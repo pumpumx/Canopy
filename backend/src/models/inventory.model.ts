@@ -58,4 +58,4 @@ const menuSchema = new Schema<menuType>({
 
 export const Categoryategory = mongoose.model("Category", categorySchema);
 export const Item = mongoose.model("Item", itemSchema);
-export const menu = mongoose.model("Menu", menuSchema);
+export const Menu = mongoose.model("Menu", menuSchema);
