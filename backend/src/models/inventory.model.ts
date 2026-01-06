@@ -1,5 +1,4 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { required } from "zod/v4/core/util.cjs";
 
 type itemType = {
   itemName: string,
@@ -9,7 +8,8 @@ type itemType = {
 
 type categoryType = {
   categoryName: string,
-  itemList: Types.ObjectId[]
+  menuId: Types.ObjectId
+  itemList: Types.ObjectId[],
 }
 
 type menuType = {
@@ -35,7 +35,12 @@ const itemSchema = new Schema<itemType>({
 const categorySchema = new Schema<categoryType>({
   categoryName: {
     type: String,
+    index: true,
     required: true,
+  },
+  menuId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Menu",
   },
   itemList: [{
     type: mongoose.Types.ObjectId,
@@ -49,13 +54,12 @@ const menuSchema = new Schema<menuType>({
   menuName: {
     type: String,
     required: true,
+    index: true,
+    unique: true,
   },
-  inventory: [{
-    type: mongoose.Types.ObjectId,
-    ref: "Category"
-  }],
 }, { timestamps: true })
 
-export const Categoryategory = mongoose.model("Category", categorySchema);
+export const Category = mongoose.model("Category", categorySchema);
 export const Item = mongoose.model("Item", itemSchema);
 export const Menu = mongoose.model("Menu", menuSchema);
+

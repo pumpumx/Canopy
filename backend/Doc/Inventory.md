@@ -19,3 +19,7 @@ This inventory management system is capable of creating multiple **menu's** for 
           4. addcategory -> /addcategory
           5. removecategory -> /removecategory
           6. edit category -> /editcategory
+
+  # In future add a image option for each menu , category and item as well!!
+
+
