@@ -1,4 +1,5 @@
 import { Router, type IRouter } from "express";
+import { createMenu } from "src/controllers/inventory.controller";
 
 
 
@@ -16,7 +17,7 @@ const inventoryRouterConfig = Object.freeze({
 
 export const inventoryRouter: IRouter = Router();
 
-inventoryRouter.route(`${inventoryRouterConfig.createMenu}`)
+inventoryRouter.route(`${inventoryRouterConfig.createMenu}`).post(createMenu)
 inventoryRouter.route(`${inventoryRouterConfig.addCategory}`)
 inventoryRouter.route(`${inventoryRouterConfig.editCategory}`)
 inventoryRouter.route(`${inventoryRouterConfig.deleteCategory}`)

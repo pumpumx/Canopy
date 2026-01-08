@@ -19,7 +19,9 @@ app.use(bodyParser.json({
   limit: '64kb',
 }))
 
+import { inventoryRouter } from './routes/inventory.routes'
 
+app.use('/api/v1/menu', inventoryRouter);
 
 app.use(globalErrorHandler);
 

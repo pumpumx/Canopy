@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: mongodb/mongodb-community-server
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongoData:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: pumpum
+      MONGO_INITDB_ROOT_PASSWORD: jojo
+    restart: unless-stopped
+volumes:
+  mongoData:
+    driver: local
