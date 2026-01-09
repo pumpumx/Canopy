@@ -2,6 +2,8 @@ import { Category, Menu } from "src/models/inventory.model";
 import { ApiError } from "src/utils/apiError";
 import { z } from "zod";
 import { Types } from "mongoose";
+import mongoose from "mongoose";
+import type { editCategorySchema } from "src/controllers/inventory.controller";
 
 const menuSchema = z.object({
   menuName: z.string().min(1).max(30),
@@ -12,21 +14,21 @@ const categorySchema = z.object({
 
 
 export const createMenuService = async (menuName: string) => {
+
   const validation = menuSchema.safeParse({ menuName });
   if (!validation.success) {
     throw new ApiError(400, "Invalid menuName");
   }
 
-  const menuExists = await Menu.findOne({ menuName });
+  const menuExists = await Menu.findOne({ menuName }); //Db not working
   if (menuExists) {
     throw new ApiError(409, `${menuName} already exists`);
   }
 
   const menu = await Menu.create({ menuName });
-
   return menu;
-};
 
+};
 
 type categoryResponse = {
   _id: Types.ObjectId
@@ -61,6 +63,38 @@ export const addCategoryService = async (menuName: string, categoryName: string)
     _id: createCategory._id,
     categoryName: categoryName,
     menuId: menuExists._id,
+  }
+  return response
+
+}
+
+type editCategoryDto = z.infer<typeof editCategorySchema>
+export const editCategoryNameService = async (dto: editCategoryDto) => {
+
+  //Find the category for that specific menu and change the name of itemList
+  const menuExists = await Menu.findOne({ menuName: dto.menuName }).select("_id");
+
+  if (!menuExists) {
+    throw new ApiError(404, "Menu does not exists")
+  }
+
+  const updateCategory = await Category.findOneAndUpdate(
+    {
+      categoryName: dto.prevCategoryName,
+      menuId: menuExists._id
+    },
+    {
+      $set: { categoryName: dto.newCategoryName }
+    },
+    {
+      new: true,
+      runValidators: true
+    })
+
+  const response: editCategoryDto = {
+    menuName: dto.menuName,
+    prevCategoryName: dto.prevCategoryName,
+    newCategoryName: dto.newCategoryName
   }
   return response
 

@@ -5,13 +5,11 @@ type itemType = {
   price: number,
   popularityScore: number
 }
-
 type categoryType = {
   categoryName: string,
   menuId: Types.ObjectId
   itemList: Types.ObjectId[],
 }
-
 type menuType = {
   menuName: string,
   inventory: Types.ObjectId[]
@@ -35,7 +33,6 @@ const itemSchema = new Schema<itemType>({
 const categorySchema = new Schema<categoryType>({
   categoryName: {
     type: String,
-    index: true,
     required: true,
   },
   menuId: {
@@ -54,10 +51,10 @@ const menuSchema = new Schema<menuType>({
   menuName: {
     type: String,
     required: true,
-    index: true,
-    unique: true,
   },
 }, { timestamps: true })
+
+categorySchema.index({ categoryName: 1, menuId: 1 }, { unique: true })
 
 export const Category = mongoose.model("Category", categorySchema);
 export const Item = mongoose.model("Item", itemSchema);

@@ -12,4 +12,3 @@ export const env = Object.freeze({
   port: _env.APP_PORT,
   db_url: _env.MONGO_URL
 })
-

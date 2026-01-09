@@ -6,7 +6,6 @@ import { globalErrorHandler } from './middlewares/errorHandler'
 export const app: Express = express()
 
 
-
 app.use(cors({
   credentials: true,
   origin: "*", //For initial development process

@@ -10,10 +10,10 @@ import { connectDB } from "./DB/connect";
 
 await connectDB()
   .then(() => {
-    console.log("DB Connected successfully")
+    console.log("Database Connected Successfully")
   })
 
-app.listen(env.port, () => {
+app.listen(env.port, "0.0.0.0", () => {
   console.log("App successfully running at port: ", env.port)
 })
 

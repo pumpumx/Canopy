@@ -1,10 +1,11 @@
 import { Router, type IRouter } from "express";
-import { createMenu } from "src/controllers/inventory.controller";
+import { addCategory, createMenu, editCategoryName } from "src/controllers/inventory.controller";
 
 
 
 const inventoryRouterConfig = Object.freeze({
   createMenu: '/createMenu',
+
   addCategory: '/addCategory',
   editCategory: '/editCategory',
   deleteCategory: '/deleteCategory',
@@ -18,8 +19,8 @@ const inventoryRouterConfig = Object.freeze({
 export const inventoryRouter: IRouter = Router();
 
 inventoryRouter.route(`${inventoryRouterConfig.createMenu}`).post(createMenu)
-inventoryRouter.route(`${inventoryRouterConfig.addCategory}`)
-inventoryRouter.route(`${inventoryRouterConfig.editCategory}`)
+inventoryRouter.route(`${inventoryRouterConfig.addCategory}`).post(addCategory)
+inventoryRouter.route(`${inventoryRouterConfig.editCategory}`).post(editCategoryName)
 inventoryRouter.route(`${inventoryRouterConfig.deleteCategory}`)
 inventoryRouter.route(`${inventoryRouterConfig.addItem}`)
 inventoryRouter.route(`${inventoryRouterConfig.editItem}`)
