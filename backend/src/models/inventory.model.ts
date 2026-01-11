@@ -3,7 +3,9 @@ import mongoose, { Schema, Types } from "mongoose";
 type itemType = {
   itemName: string,
   price: number,
-  popularityScore: number
+  popularityScore: number,
+  categoryId: Types.ObjectId
+  menuId: Types.ObjectId
 }
 type categoryType = {
   categoryName: string,
@@ -23,11 +25,22 @@ const itemSchema = new Schema<itemType>({
   price: {
     type: Number,
     required: true,
+    default: 0
+
   },
   popularityScore: {
     type: Number,
-    required: true
-  }
+    required: true,
+    default: 0
+  },
+  categoryId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Category"
+  },
+  menuId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Menu"
+  },
 })
 
 const categorySchema = new Schema<categoryType>({
@@ -39,13 +52,10 @@ const categorySchema = new Schema<categoryType>({
     type: mongoose.Types.ObjectId,
     ref: "Menu",
   },
-  itemList: [{
-    type: mongoose.Types.ObjectId,
-    ref: "Item"
-  }]
-}, {
-  timestamps: true,
-})
+},
+  {
+    timestamps: true,
+  })
 
 const menuSchema = new Schema<menuType>({
   menuName: {
@@ -54,7 +64,9 @@ const menuSchema = new Schema<menuType>({
   },
 }, { timestamps: true })
 
+menuSchema.index({ menuName: 1 }, { unique: true })
 categorySchema.index({ categoryName: 1, menuId: 1 }, { unique: true })
+itemSchema.index({ itemName: 1 }, { unique: true })
 
 export const Category = mongoose.model("Category", categorySchema);
 export const Item = mongoose.model("Item", itemSchema);

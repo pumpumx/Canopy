@@ -1,9 +1,9 @@
-import { Category, Menu } from "src/models/inventory.model";
+import { Category, Item, Menu } from "src/models/inventory.model";
 import { ApiError } from "src/utils/apiError";
 import { z } from "zod";
 import { Types } from "mongoose";
 import mongoose from "mongoose";
-import type { editCategorySchema } from "src/controllers/inventory.controller";
+import type { addItemSchema, deleteCategorySchema, deleteItemSchema, editCategorySchema, editItemSchema } from "src/controllers/inventory.controller";
 
 const menuSchema = z.object({
   menuName: z.string().min(1).max(30),
@@ -78,6 +78,9 @@ export const editCategoryNameService = async (dto: editCategoryDto) => {
     throw new ApiError(404, "Menu does not exists")
   }
 
+
+  //Check whether that newCategory name already exists or not -> Edge case : handled by mongodb itself
+
   const updateCategory = await Category.findOneAndUpdate(
     {
       categoryName: dto.prevCategoryName,
@@ -99,3 +102,143 @@ export const editCategoryNameService = async (dto: editCategoryDto) => {
   return response
 
 }
+
+type deleteCategoryDto = z.infer<typeof deleteCategorySchema>
+
+export const deleteCategoryService = async (dto: deleteCategoryDto) => {
+
+  const menuExists = await Menu.findOne({ menuName: dto.menuName }).select("_id")
+
+  if (!menuExists) {
+    throw new ApiError(404, "Menu does not Exists")
+  }
+
+  const category = await Category.findOneAndDelete({
+    categoryName: dto.categoryName,
+    menuId: menuExists._id
+  })
+
+  const responseData: deleteCategoryDto = {
+    menuName: dto.menuName,
+    categoryName: dto.categoryName
+  }
+
+  return responseData
+
+}
+
+type addItemDto = z.infer<typeof addItemSchema>
+type AddItemResponse = {
+  itemName: string
+  price: number
+}
+
+export const addItemService = async (
+  dto: addItemDto
+): Promise<AddItemResponse> => {
+
+  /**
+   * QUERY 1
+   * Validate Menu + Category ownership in ONE DB hit
+   */
+  const category = await Category.findOne({
+    categoryName: dto.categoryName
+  })
+    .populate({
+      path: "menuId",
+      match: { menuName: dto.menuName },
+      select: "_id"
+    })
+    .select("_id menuId")
+
+  // If menu mismatch OR category not found
+  if (!category?.menuId) {
+    throw new ApiError(404, "Menu or Category does not exist")
+  }
+
+  /**
+   * QUERY 2
+   * Create item (DB enforces uniqueness)
+   */
+  const item = await Item.create({
+    itemName: dto.itemName,
+    price: dto.price,
+    menuId: category.menuId._id,
+    categoryId: category._id
+  })
+
+  return {
+    itemName: item.itemName,
+    price: item.price
+  }
+}
+
+type editItemDto = z.infer<typeof editItemSchema>
+export const editItemService = async (dto: editItemDto): Promise<editItemDto> => {
+
+  const categoryExists = await Category.findOne({
+    categoryName: dto.categoryName
+  }).populate({
+    path: "menuId",
+    match: { menuName: dto.menuName },
+    select: "_id"
+  }).select("_id");
+
+  if (!categoryExists?.menuId) {
+    throw new ApiError(404, "Menu does not exists")
+  }
+
+  const itemExists = await Item.findOneAndUpdate({
+    itemName: dto.prevItemName,
+    categoryId: categoryExists._id,
+    menuId: categoryExists.menuId
+  },
+    {
+      $set: {
+        itemName: dto.newItemName,
+        price: dto.price
+      }
+    }, {
+    new: true,
+    runValidators: true,
+  })
+
+  return dto
+
+}
+
+type deleteItemDto = z.infer<typeof deleteItemSchema>
+export const deleteItemService = async (dto: deleteItemDto): Promise<deleteItemDto> => {
+  const categoryExists = await Category.findOne({
+    categoryName: dto.categoryName
+  }).populate({
+    path: "menuId",
+    match: { menuName: dto.menuName },
+    select: "_id"
+  }).select("_id");
+
+  if (!categoryExists?.menuId) {
+    throw new ApiError(404, "Menu does not exists")
+  }
+
+  const itemExists = await Item.findOneAndDelete({
+    itemName: dto.itemName,
+    categoryId: categoryExists._id,
+    menuId: categoryExists.menuId
+  })
+
+  if (!itemExists?._id) {
+    throw new ApiError(404, "Item does not exists")
+  }
+
+  return dto
+
+}
+
+
+
+
+
+
+
+
