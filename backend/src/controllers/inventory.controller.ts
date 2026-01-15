@@ -1,7 +1,7 @@
 import { ApiResponse } from "src/utils/apiResponse";
 import type { Request, Response } from 'express'
 import { asyncHandler } from "src/utils/asyncHandler";
-import { addCategoryService, addItemService, createMenuService, deleteItemService, deleteCategoryService, editCategoryNameService, editItemService } from "src/services/inventory.service";
+import { addCategoryService, addItemService, createMenuService, deleteItemService, deleteCategoryService, editCategoryNameService, editItemService, fetchCompleteMenuService } from "src/services/inventory.service";
 import { ApiError } from "src/utils/apiError";
 import * as z from 'zod'
 
@@ -118,6 +118,18 @@ export const deleteItem = asyncHandler(async (req: Request, res: Response) => {
   )
 })
 
+
+export const fetchMenuSchema = z.object({
+  menuName: z.string().trim().min(1).max(30).lowercase()
+})
+
+export const fetchCompleteMenu = asyncHandler(async (req: Request, res: Response) => {
+  const dto = fetchMenuSchema.parse(req.query)
+  const fetchMenuResponse = await fetchCompleteMenuService(dto);
+  return res.status(200).json(
+    new ApiResponse(200, "Menu Fetched Successfully", fetchMenuResponse)
+  )
+})
 
 
 

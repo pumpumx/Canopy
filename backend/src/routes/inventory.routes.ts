@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { addCategory, addItem, createMenu, deleteCategory, deleteItem, editCategoryName, editItem } from "src/controllers/inventory.controller";
+import { addCategory, addItem, createMenu, deleteCategory, deleteItem, editCategoryName, editItem, fetchCompleteMenu } from "src/controllers/inventory.controller";
 
 
 
@@ -31,6 +31,6 @@ inventoryRouter.route(`${inventoryRouterConfig.deleteItem}`).delete(deleteItem)
 
 //All data fetching api's , used for data fetching to the frontend 
 
-//inventoryRouter.route(`${inventoryRouterConfig.fetchMenu}`).get()
+inventoryRouter.route(`${inventoryRouterConfig.fetchMenu}`).get(fetchCompleteMenu)
 
 

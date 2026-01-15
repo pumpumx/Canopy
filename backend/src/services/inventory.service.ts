@@ -3,8 +3,7 @@ import { ApiError } from "src/utils/apiError";
 import { z } from "zod";
 import { Types } from "mongoose";
 import mongoose from "mongoose";
-import type { addItemSchema, deleteCategorySchema, deleteItemSchema, editCategorySchema, editItemSchema } from "src/controllers/inventory.controller";
-
+import type { addItemSchema, deleteCategorySchema, deleteItemSchema, editCategorySchema, editItemSchema, fetchMenuSchema } from "src/controllers/inventory.controller";
 const menuSchema = z.object({
   menuName: z.string().min(1).max(30),
 });
@@ -232,9 +231,54 @@ export const deleteItemService = async (dto: deleteItemDto): Promise<deleteItemD
   }
 
   return dto
-
 }
 
+type fetchCompleteMenuDto = z.infer<typeof fetchMenuSchema>
+export const fetchCompleteMenuService = async (dto: fetchCompleteMenuDto) => {
+
+  //validate menu 
+  const menuExists = await Menu.findOne({ menuName: dto.menuName }).select("_id")
+  if (!menuExists) {
+    throw new ApiError(404, "Menu Does not exists");
+  }
+
+  //fetch all categories and items related to that menu 
+
+
+  const completeMenuFetch = await Category.aggregate([
+    { $match: { menuId: menuExists._id } },
+    {
+      $lookup: {
+        foreignField: "categoryId",
+        localField: "_id",
+        from: "items",
+        as: "itemList"
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        categoryName: 1,
+        itemList: {
+          $map: {
+            input: "$itemList",
+            as: "item",
+            in: {
+              itemName: "$$item.itemName",
+              itemPrice: "$$item.price",
+              popularityScore: "$$item.popularityScore"
+            }
+          }
+        }
+      }
+    }
+  ])
+
+  console.log("menu:", completeMenuFetch)
+
+  return completeMenuFetch
+
+}
 
 
 
