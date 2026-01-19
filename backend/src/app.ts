@@ -8,7 +8,7 @@ export const app: Express = express()
 
 app.use(cors({
   credentials: true,
-  origin: "*", //For initial development process
+  origin: env.node_prod === "DEV" ? "*" : env.db_url, //For initial development process
 }))
 
 app.use(bodyParser.urlencoded({
@@ -19,9 +19,11 @@ app.use(bodyParser.json({
 }))
 
 import { inventoryRouter } from './routes/inventory.routes'
+import { userRouter } from './routes/user.routes'
+import { env } from './config/envConfig'
 
 app.use('/api/v1/menu', inventoryRouter);
-
+app.use('/api/v1/user', userRouter);
 app.use(globalErrorHandler);
 
 

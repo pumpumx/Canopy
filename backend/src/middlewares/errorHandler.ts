@@ -1,6 +1,8 @@
 
 // middlewares/globalErrorHandler.ts
 //
+
+import { ZodError } from "zod";
 import type { Request, Response, NextFunction } from "express";
 import { ApiError } from "../utils/apiError";
 

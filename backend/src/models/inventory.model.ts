@@ -41,7 +41,7 @@ const itemSchema = new Schema<itemType>({
     type: mongoose.Types.ObjectId,
     ref: "Menu"
   },
-})
+}, { timestamps: true })
 
 const categorySchema = new Schema<categoryType>({
   categoryName: {

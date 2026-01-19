@@ -49,9 +49,12 @@ export const addCategoryService = async (menuName: string, categoryName: string)
   const menuExists = await Menu.findOne({ menuName }).select("_id");
 
   if (!menuExists) {
-    throw new ApiError(400, "Menu does not exists");
+    throw new ApiError(409, "Menu does not exists");
   }
 
+  console.log("category exists check")
+
+  console.log("category does not found")
   const createCategory = await Category.create({
     categoryName: categoryName,
     menuId: menuExists._id,
