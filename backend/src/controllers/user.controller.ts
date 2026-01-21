@@ -2,7 +2,7 @@ import { asyncHandler } from "src/utils/asyncHandler";
 import { ApiResponse } from "src/utils/apiResponse";
 import type { Request, Response } from "express";
 import { z } from 'zod'
-import { registerUserService } from "src/services/user.service";
+import { loginUserService, registerUserService } from "src/services/user.service";
 
 
 export const registerUserSchema = z.object({
@@ -24,9 +24,20 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
     .json(
       new ApiResponse(200, "User Registered Successfully", { registerUserResponse })
     )
-
 })
 
+export const loginUserSchema = z.object({
+  email: z.email({ error: "Email is Required" }).lowercase(),
+  password: z.string({ error: "Invalid pass format" }).min(8)
+})
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
+  const dto = loginUserSchema.parse(req.body)
+
+  const loginUserResponse = await loginUserService(dto) //Returns access Token
+
+  return res.cookie("accessToken", loginUserResponse.accessToken)
+    .json(
+      new ApiResponse(200, "User Logged in successfully",)
+    )
 })

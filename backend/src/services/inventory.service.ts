@@ -247,7 +247,6 @@ export const fetchCompleteMenuService = async (dto: fetchCompleteMenuDto) => {
 
   //fetch all categories and items related to that menu 
 
-
   const completeMenuFetch = await Category.aggregate([
     { $match: { menuId: menuExists._id } },
     {

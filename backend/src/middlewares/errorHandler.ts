@@ -20,7 +20,7 @@ export const globalErrorHandler = (
   }
 
   // DEVELOPMENT
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "DEV") {
     return res.status(error.status).json({
       status: error.status,
       message: error.message,
@@ -30,7 +30,7 @@ export const globalErrorHandler = (
   }
 
   // PRODUCTION
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "PROD") {
     return res.status(error.status).json({
       status: error.status,
       message: error.isOperational
