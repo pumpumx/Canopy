@@ -43,7 +43,6 @@ export const loginUserService = async (dto: loginUserType) => {
   }
 
   const accessToken = userExists.generateAccessToken()
-
   return { accessToken }
 }
 

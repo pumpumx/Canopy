@@ -15,5 +15,5 @@ export const userRouter: IRouter = Router()
 
 userRouter.route(`${routerConfig.registerUser}`).post(registerUser)
 userRouter.route(`${routerConfig.loginUser}`).post(loginUser)
-//userRouter.route(`${routerConfig.verifyUser}`).get(verifyJWT)
+//userRouter.route(`${routerConfig.verifyUser}`)
 

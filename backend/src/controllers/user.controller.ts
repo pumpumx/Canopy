@@ -27,7 +27,7 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
 })
 
 export const loginUserSchema = z.object({
-  email: z.email({ error: "Email is Required" }).lowercase(),
+  email: z.email({ error: "Email is Required" }).lowercase().trim(),
   password: z.string({ error: "Invalid pass format" }).min(8)
 })
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {

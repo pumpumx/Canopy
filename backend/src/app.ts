@@ -26,4 +26,3 @@ app.use('/api/v1/menu', inventoryRouter);
 app.use('/api/v1/user', userRouter);
 app.use(globalErrorHandler);
 
-

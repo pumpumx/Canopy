@@ -13,8 +13,8 @@ type categoryType = {
   itemList: Types.ObjectId[],
 }
 type menuType = {
+  user: Types.ObjectId
   menuName: string,
-  inventory: Types.ObjectId[]
 }
 
 const itemSchema = new Schema<itemType>({
@@ -58,6 +58,10 @@ const categorySchema = new Schema<categoryType>({
   })
 
 const menuSchema = new Schema<menuType>({
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "User"
+  },
   menuName: {
     type: String,
     required: true,
