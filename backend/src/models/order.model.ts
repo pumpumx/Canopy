@@ -105,4 +105,3 @@ const invoiceSchema = new Schema<invoiceSchemaType>({
 
 export const Invoice = mongoose.model("Invoice", invoiceSchema)
 
-
