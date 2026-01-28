@@ -8,7 +8,7 @@ import * as z from 'zod'
 
 //Add authorization via jwt middleware at last 
 //Any field value coming from the frontend will be converted into lowercase
-//All these Routes will be protected routes , accessible by a single admin
+//All these Routes will be protected routes ,
 const menuSchema = z.object({
   menuName: z.string().min(1).max(30).toLowerCase()
 })

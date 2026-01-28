@@ -6,6 +6,7 @@ import { ModuleKind } from "typescript";
 
 type orderType = {
   orderNumber: string,
+  menuId: Types.ObjectId,
   userId: Types.ObjectId
   orderSource: "COUNTER" | "ONLINE",
   orderType: "DINE_IN" | "TAKE_AWAY",
@@ -18,6 +19,10 @@ const orderSchema = new Schema<orderSchemaType>({
   orderNumber: {
     type: String,
     required: true,
+  },
+  menuId: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Menu'
   },
   userId: {
     type: mongoose.Types.ObjectId,
