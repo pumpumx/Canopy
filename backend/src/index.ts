@@ -6,7 +6,7 @@ import { configDotenv } from "dotenv";
 import { app } from "./app"
 import { env } from "./config/envConfig";
 import { connectDB } from "./DB/connect";
-import { Redis } from "./utils/redis/redisInstantiation";
+import { Redis } from "./infra/redis/redisInstantiation";
 
 
 await connectDB()

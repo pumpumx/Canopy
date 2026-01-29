@@ -17,12 +17,17 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json({
   limit: '64kb',
 }))
+app.use(cookieParser())
 
 import { inventoryRouter } from './routes/inventory.routes'
 import { userRouter } from './routes/user.routes'
 import { env } from './config/envConfig'
+import { orderRouter } from './routes/order.routes'
+import cookieParser from 'cookie-parser'
 
 app.use('/api/v1/menu', inventoryRouter);
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/order', orderRouter)
+
 app.use(globalErrorHandler);
 

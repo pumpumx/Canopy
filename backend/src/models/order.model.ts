@@ -95,8 +95,6 @@ const invoiceSchema = new Schema<invoiceSchemaType>({
   },
   invoiceNumber: {
     Type: String,
-    unique: true,
-    required: true,
   },
   cgst: {
     type: Number,

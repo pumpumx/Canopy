@@ -27,6 +27,7 @@
     "legacyWatch": false
   },
   "dependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",

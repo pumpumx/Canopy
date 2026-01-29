@@ -7,8 +7,8 @@ import z from "zod"
 //---------------------------------------------------Order Business LOGIC------------------------------------------------------------
 type placeOrderServiceDto = z.infer<typeof placeOrderSchema>
 type placeOrderResponse = {
-  status: "SUCCESS",
-  data: any
+  status: "SUCCESS" | "FAILURE",
+  data?: any
 }
 export const placeOrderService = async (dto: placeOrderServiceDto): Promise<placeOrderResponse> => {
 
@@ -34,5 +34,8 @@ export const placeOrderService = async (dto: placeOrderServiceDto): Promise<plac
     idempotentKey: dto.idempotentKey,
   })
 
-
+  const response: placeOrderResponse = {
+    status: "SUCCESS"
+  }
+  return response
 }

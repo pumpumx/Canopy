@@ -15,6 +15,7 @@ class ClientRedis {
       ClientRedis.redisInstance = new ClientRedis()
     }
     return ClientRedis.redisInstance
+
   }
 
   public async connectRedis(): Promise<void> {
