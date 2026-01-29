@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import type { userReq } from "src/middlewares/verifyJWT";
 
 type AsyncController = (
   req: Request,
@@ -8,7 +9,7 @@ type AsyncController = (
 
 export const asyncHandler =
   (fn: AsyncController) =>
-    (req: Request, res: Response, next: NextFunction) => {
+    (req: Request | userReq, res: Response, next: NextFunction) => {
       Promise.resolve(fn(req, res, next)).catch(next);
     };
 

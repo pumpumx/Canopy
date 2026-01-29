@@ -4,28 +4,18 @@ import { env } from 'src/config/envConfig';
 import { ApiError } from 'src/utils/apiError';
 import { asyncHandler } from 'src/utils/asyncHandler'
 
-interface userReq extends Request {
-  user: string | jwt.JwtPayload | null
-}
 
-export const verifyJWT = (async (req: userReq, res: Response, next: NextFunction) => {
-  try {
-    const { accessToken } = req.cookies.accessToken;
 
-    //verifyThis accessToken
-    const verifyAccessToken = jwt.verify(accessToken, env.access_token_key);
+export const verifyJWT = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 
-    if (!verifyAccessToken) {
-      throw new ApiError(404, "Unauthorized User")
-    }
+  const { accessToken } = req.cookies.accessToken;
 
-    const decodedToken = jwt.decode(accessToken)
+  //verifyThis accessToken
+  const decodedVerifiedToken = jwt.verify(accessToken, env.access_token_key);
 
-    req.user = decodedToken;
-    next()
-
-  } catch (error) {
-    next(error)
+  if (!decodedVerifiedToken) {
+    throw new ApiError(404, "Unauthorized User")
   }
-
+  req.user = decodedVerifiedToken
+  next()
 })

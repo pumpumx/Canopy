@@ -1,5 +1,5 @@
-
-//Boot Strap file 
+import type { RedisClientType } from "redis";
+//Boot file 
 
 
 import { configDotenv } from "dotenv";
@@ -18,9 +18,10 @@ app.listen(env.port, "0.0.0.0", () => {
   console.log("App successfully running at port: ", env.port)
 })
 
-
+export let redisClient: RedisClientType;
 await Redis.connectRedis()
   .then(() => {
+    redisClient = Redis.getCLient();
     console.log("Redis connected successfully at port 6379")
   })
   .catch((error) => {

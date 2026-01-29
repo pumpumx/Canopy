@@ -1,5 +1,4 @@
 import mongoose, { mongo, Schema, Types } from "mongoose";
-import { ModuleKind } from "typescript";
 
 
 //----------------------------------------ORDER SCHEMA---------------------------------------------------//
@@ -8,17 +7,25 @@ type orderType = {
   orderNumber: string,
   menuId: Types.ObjectId,
   userId: Types.ObjectId
+  idempotentKey: string
   orderSource: "COUNTER" | "ONLINE",
   orderType: "DINE_IN" | "TAKE_AWAY",
   status: "CREATED" | "PREPARING" | "READY" | "COMPLETED" | "CANCELLED" | "DISPUTED",
   totalAmount: number,
 }
-type orderSchemaType = Document & orderType
+type orderFunctions = { //all order db funcitons 
+
+}
+type orderSchemaType = orderType & orderFunctions
 
 const orderSchema = new Schema<orderSchemaType>({
-  orderNumber: {
+  orderNumber: { //unique idempotent key
     type: String,
     required: true,
+  },
+  idempotentKey: {
+    type: String,
+    required: true
   },
   menuId: {
     type: mongoose.Types.ObjectId,
@@ -49,6 +56,7 @@ const orderSchema = new Schema<orderSchemaType>({
   }
 }, { timestamps: true })
 
+orderSchema.index({ orderNumber: 1, idempotentKey: 1 }, { unique: true })
 export const Order = mongoose.model("Order", orderSchema);
 //----------------------------------------ORDERITEM SCHEMA---------------------------------------------------//
 
@@ -108,5 +116,6 @@ const invoiceSchema = new Schema<invoiceSchemaType>({
   },
 }, { timestamps: true })
 
+invoiceSchema.index({ invoiceNumber: 1 }, { unique: true })
 export const Invoice = mongoose.model("Invoice", invoiceSchema)
 
