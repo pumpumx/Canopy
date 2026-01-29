@@ -54,7 +54,6 @@ export const addCategoryService = async (menuName: string, categoryName: string)
 
   console.log("category exists check")
 
-  console.log("category does not found")
   const createCategory = await Category.create({
     categoryName: categoryName,
     menuId: menuExists._id,
@@ -211,6 +210,7 @@ export const editItemService = async (dto: editItemDto): Promise<editItemDto> =>
 
 type deleteItemDto = z.infer<typeof deleteItemSchema>
 export const deleteItemService = async (dto: deleteItemDto): Promise<deleteItemDto> => {
+
   const categoryExists = await Category.findOne({
     categoryName: dto.categoryName
   }).populate({
