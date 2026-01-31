@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Minus, ShoppingCart, Search } from 'lucide-react';
+import { Plus, Minus, ShoppingCart, } from 'lucide-react';
 
 import type { MenuItem, MenuData, Cart, CartItem } from '../../types/Menu/menuTypes';
 

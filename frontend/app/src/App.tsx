@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { Menu } from './components/Menu/Menu'
+import { Menu } from './Features/Menu/Menu'
+import { UserAuthPage } from './Features/User/Pages/UserAuth'
 function App() {
 
   return (
     <>
-      <Menu />
+      <UserAuthPage />
     </>
 
   )
