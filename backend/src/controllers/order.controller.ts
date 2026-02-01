@@ -9,7 +9,7 @@ import z from "zod"
 
 export const placeOrderSchema = z.object({
   orderNumber: z.string(),
-  user: z.custom<userDecodedToken | string | JwtPayload | null>(),
+  user: z.custom<userDecodedToken>(),
   idempotentKey: z.string(),//will implement this thing in the future
   menuName: z.string({ error: "Invalid menu name" }).trim().toLowerCase(),
   orderSource: z.string().trim().toUpperCase().default("COUNTER"),

@@ -1,9 +1,10 @@
 import { Category, Item, Menu } from "src/models/inventory.model";
 import { ApiError } from "src/utils/apiError";
-import { z } from "zod";
+import { boolean, z } from "zod";
 import { Types } from "mongoose";
 import mongoose from "mongoose";
-import type { addItemSchema, deleteCategorySchema, deleteItemSchema, editCategorySchema, editItemSchema, fetchMenuSchema } from "src/controllers/inventory.controller";
+import type { addItemSchema, createMenuSchema, deleteCategorySchema, deleteItemSchema, editCategorySchema, editItemSchema, fetchMenuSchema } from "src/controllers/inventory.controller";
+import type { userDecodedToken } from "src/types/express";
 const menuSchema = z.object({
   menuName: z.string().min(1).max(30),
 });
@@ -12,22 +13,53 @@ const categorySchema = z.object({
 })
 
 
-export const createMenuService = async (menuName: string) => {
+type createMenuType = z.infer<typeof createMenuSchema>
+export const createMenuService = async (dto: createMenuType) => { //Add user id 
 
-  const validation = menuSchema.safeParse({ menuName });
-  if (!validation.success) {
-    throw new ApiError(400, "Invalid menuName");
-  }
-
-  const menuExists = await Menu.findOne({ menuName }); //Db not working
+  const menuExists = await Menu.findOne({ menuName: dto.menuName, user: dto.user.userId }); //Db not working
   if (menuExists) {
-    throw new ApiError(409, `${menuName} already exists`);
+    throw new ApiError(409, `${dto.menuName} already exists`);
   }
 
-  const menu = await Menu.create({ menuName });
-  return menu;
+  const menu = await Menu.create({
+    user: dto.user.userId,
+    menuName: dto.menuName
+  });
+
+  const createMenuResponse = {
+    menuName: menu.menuName,
+    id: menu._id,
+    createdAt: menu.createdAt
+  }
+  return createMenuResponse;
 
 };
+
+export interface Menu {
+  id: string;
+  name: string;
+  createdAt: string;
+}
+type fetchAllMenusResponseType = {
+  success: boolean,
+  menuList: Menu[]
+}
+export const fetchAllMenusService = async (user: userDecodedToken): Promise<fetchAllMenusResponseType> => {
+
+  const menuList: Menu[] = await Menu.aggregate([
+    { $match: { user: user.userId } },
+    { $project: { menuName: 1 } },
+  ]);
+
+  console.log("Menu List:", menuList)
+
+  const fetchAllMenusResponse = {
+    success: true,
+    menuList: menuList,
+  }
+  return fetchAllMenusResponse
+
+}
 
 type categoryResponse = {
   _id: Types.ObjectId

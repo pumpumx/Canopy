@@ -1,24 +1,48 @@
 import { ApiResponse } from "src/utils/apiResponse";
 import type { Request, Response } from 'express'
 import { asyncHandler } from "src/utils/asyncHandler";
-import { addCategoryService, addItemService, createMenuService, deleteItemService, deleteCategoryService, editCategoryNameService, editItemService, fetchCompleteMenuService } from "src/services/inventory.service";
+import { addCategoryService, addItemService, createMenuService, deleteItemService, deleteCategoryService, editCategoryNameService, editItemService, fetchCompleteMenuService, fetchAllMenusService } from "src/services/inventory.service";
 import { ApiError } from "src/utils/apiError";
+import type { userDecodedToken } from "src/types/express";
+import type { JwtPayload } from "jsonwebtoken";
 import * as z from 'zod'
 
 
 //Add authorization via jwt middleware at last 
 //Any field value coming from the frontend will be converted into lowercase
 //All these Routes will be protected routes ,
-const menuSchema = z.object({
-  menuName: z.string().min(1).max(30).toLowerCase()
+
+export const createMenuSchema = z.object({
+  menuName: z.string().min(1).max(30).toLowerCase(),
+  createdAt: z.string().optional(),
+  user: z.custom<userDecodedToken>(),
 })
 
 export const createMenu = asyncHandler(async (req: Request, res: Response) => {
-  const dto = menuSchema.parse(req.body)
-  const menu = await createMenuService(dto.menuName);
+
+  const user = req.user;
+  if (!user) {
+    throw new ApiError(404, "Unauthorized Request")
+  }
+
+  const dto = createMenuSchema.parse(req.body)
+  dto.user = user as userDecodedToken;
+  const createMenuResponse = await createMenuService(dto)
 
   return res.status(200).json(
-    new ApiResponse(200, "Menu Created Successfully", menu)
+    new ApiResponse(200, "Menu Created Successfully", { createMenuResponse })
+  )
+})
+
+export const fetchAllMenus = asyncHandler(async (req: Request, res: Response) => {
+  const user = req.user
+  if (!user) {
+    throw new ApiError(404, "Unauthorized user")
+  }
+  const fetchAllMenusResponse = await fetchAllMenusService(user);
+
+  return res.status(200).json(
+    new ApiResponse(200, "Menus Fetched Successfully", { fetchAllMenusResponse })
   )
 })
 
@@ -31,7 +55,7 @@ export const addCategory = asyncHandler(async (req: Request, res: Response) => {
 
   const dto = addCategorySchema.parse(req.body)
   const categoryResponse = await addCategoryService(dto.menuName, dto.categoryName);
-  console.log(categoryResponse)
+
   return res
     .status(200)
     .json(

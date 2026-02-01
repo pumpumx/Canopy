@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../../../store/userAuth.store";
 import { registerUser, type registerUserType } from "../api/users.api";
+import { useNavigate } from "react-router-dom";
 // Signup Component
 export const SignupForm: React.FC = () => {
   const [name, setName] = useState('');
@@ -12,6 +13,8 @@ export const SignupForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const navigate = useNavigate();
 
     const formData: registerUserType = {
       email: email,
@@ -31,7 +34,7 @@ export const SignupForm: React.FC = () => {
       const data = await registerUser(formData)
       //Toast the response here
       signup(name, email)
-      toggleMode()
+      navigate('/dashboard')
       //Redirect to home page
     } catch (error: any) {
       console.warn(error.response?.data?.error)
@@ -144,6 +147,7 @@ export const SignupForm: React.FC = () => {
       <div className="mt-8 text-center text-sm text-gray-600">
         Already have an account?{' '}
         <button type="submit"
+          onClick={toggleMode}
           className="text-violet-600 hover:text-violet-700 font-semibold transition-colors hover:underline"
         >
           Sign in

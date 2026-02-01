@@ -1,13 +1,7 @@
-import { Menu } from './Features/Menu/Menu'
-import { UserAuthPage } from './Features/User/Pages/UserAuth'
+import { Outlet } from 'react-router-dom'
 function App() {
 
-  return (
-    <>
-      <UserAuthPage />
-    </>
-
-  )
+  return <Outlet />
 }
 
 export default App

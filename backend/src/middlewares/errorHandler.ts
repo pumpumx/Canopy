@@ -14,6 +14,7 @@ export const globalErrorHandler = (
 ) => {
   let error = err;
 
+  console.log("Raw Error: ", error)
   // Default values
   if (!(error instanceof ApiError)) {
     error = new ApiError(500, "Internal Server error");
@@ -21,6 +22,7 @@ export const globalErrorHandler = (
 
   // DEVELOPMENT
   if (process.env.NODE_ENV === "DEV") {
+    console.log(error)
     return res.status(error.status).json({
       status: error.status,
       message: error.message,

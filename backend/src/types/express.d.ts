@@ -11,7 +11,7 @@ export type userDecodedToken = {
 declare global {
   namespace Express {
     interface Request {
-      user?: userDecodedToken | JwtPayload | string | null;
+      user?: userDecodedToken;
     }
   }
 }

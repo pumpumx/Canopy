@@ -1,6 +1,6 @@
 import { Router } from "express";
 import type { IRouter } from "express";
-import { loginUser, registerUser } from "src/controllers/user.controller";
+import { loginUser, registerUser, verifyUser } from "src/controllers/user.controller";
 import { verifyJWT } from "src/middlewares/verifyJWT";
 
 
@@ -15,5 +15,5 @@ export const userRouter: IRouter = Router()
 
 userRouter.route(`${routerConfig.registerUser}`).post(registerUser)
 userRouter.route(`${routerConfig.loginUser}`).post(loginUser)
-//userRouter.route(`${routerConfig.verifyUser}`)
+userRouter.route(`${routerConfig.verifyUser}`).post(verifyJWT, verifyUser)
 

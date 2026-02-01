@@ -11,6 +11,11 @@ type registerUserType = z.infer<typeof registerUserSchema>
 export const registerUserService = async (dto: registerUserType) => {
 
   //check for whether user with same email exists or not 
+  const userExists = await User.findOne({ email: dto.email })
+  if (userExists) {
+    throw new ApiError(404, "User already Exists with this email")
+  }
+
   const user = await User.create({
     fullName: dto.fullName,
     email: dto.email,
@@ -22,7 +27,6 @@ export const registerUserService = async (dto: registerUserType) => {
   const accessToken = user.generateAccessToken()
 
   return { accessToken }
-
 }
 
 

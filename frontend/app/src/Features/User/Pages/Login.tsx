@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../../../store/userAuth.store';
+import { loginUser } from '../api/users.api';
+import { useNavigate } from 'react-router-dom';
 
 // Login Component
 export const LoginForm: React.FC = () => {
@@ -8,11 +10,22 @@ export const LoginForm: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const { login, toggleMode } = useAuthStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const navigate = useNavigate();
 
-    login(email)
-    toggleMode();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const loginData = {
+      email: email,
+      password: password
+    }
+    try {
+      const loginUserResponse = await loginUser(loginData)
+      login(email)
+      navigate('/dashboard')
+
+    } catch (error) {
+      console.warn("Error while login user", error)
+    }
   };
 
   return (

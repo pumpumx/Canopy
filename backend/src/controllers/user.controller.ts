@@ -3,6 +3,7 @@ import { ApiResponse } from "src/utils/apiResponse";
 import type { Request, Response } from "express";
 import { z } from 'zod'
 import { loginUserService, registerUserService } from "src/services/user.service";
+import { ApiError } from "src/utils/apiError";
 
 
 export const registerUserSchema = z.object({
@@ -16,13 +17,14 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
 
   console.log("Inside register user")
   const dto = registerUserSchema.parse(req.body)
+  console.log("yo user parsed")
 
   const registerUserResponse = await registerUserService(dto);
 
   return res.status(200)
     .cookie("accessToken", registerUserResponse.accessToken)
     .json(
-      new ApiResponse(200, "User Registered Successfully", { registerUserResponse })
+      new ApiResponse(200, "User Registered Successfully", { success: true, email: dto.email, fullName: dto.fullName })
     )
 })
 
@@ -40,4 +42,16 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     .json(
       new ApiResponse(200, "User Logged in successfully",)
     )
+})
+
+export const verifyUser = asyncHandler(async (req: Request, res: Response) => {
+  const user = req.user;
+
+  if (!user) {
+    throw new ApiError(404, "Unauthorized User");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, "User Authorized", { success: true })
+  )
 })

@@ -15,7 +15,7 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  isLogin: false,
+  isLogin: true,
   user: null,
   toggleMode: () => set((state) => ({ isLogin: !state.isLogin })),
   login: (email: string) => set({ user: { email } }),

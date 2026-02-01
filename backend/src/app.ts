@@ -8,7 +8,7 @@ export const app: Express = express()
 
 app.use(cors({
   credentials: true,
-  origin: env.node_prod === "DEV" ? "*" : env.db_url, //For initial development process
+  origin: env.node_prod === "DEV" ? "http://localhost:5173" : env.db_url, //For initial development process
 }))
 
 app.use(bodyParser.urlencoded({
