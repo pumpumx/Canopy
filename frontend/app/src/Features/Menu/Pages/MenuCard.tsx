@@ -2,8 +2,9 @@ import React from 'react';
 
 export interface Menu {
   menuName: string;
-  id?: string
+  _id: string
   createdAt?: string;
+  updatedAt?: string;
 }
 
 interface MenuCardProps {
@@ -23,7 +24,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({ menu, onMenuClick }) => {
 
   return (
     <button
-      onClick={() => onMenuClick(menu.menuName)}
+      onClick={() => onMenuClick(menu._id)}
       className="group relative w-full aspect-square rounded-3xl bg-white/80 backdrop-blur-sm border-2 border-purple-300/50 hover:border-purple-500 hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden"
     >
       {/* Background gradient on hover */}

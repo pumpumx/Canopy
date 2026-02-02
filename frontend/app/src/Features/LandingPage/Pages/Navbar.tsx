@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate()
+
+  const signInNavigateHandler = () => {
+    navigate('/login')
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-purple-500/10 shadow-sm">
@@ -42,7 +48,10 @@ export const Navbar: React.FC = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <button className="px-6 py-2.5 text-gray-700 font-semibold hover:text-purple-600 transition-colors">
+            <button
+              onClick={signInNavigateHandler}
+              className="px-6 py-2.5 text-gray-700 font-semibold hover:text-purple-600 transition-colors">
+
               Sign In
             </button>
             <button className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-semibold shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all duration-200">
@@ -51,10 +60,7 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile menu button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-gray-700 hover:text-purple-600 transition-colors"
-          >
+          <button className="md:hidden p-2 text-gray-700 hover:text-purple-600 transition-colors">
             {isMobileMenuOpen ? (
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -85,7 +91,9 @@ export const Navbar: React.FC = () => {
               About
             </a>
             <div className="pt-4 space-y-3 border-t border-purple-500/10">
-              <button className="w-full px-6 py-3 text-gray-700 font-semibold hover:bg-purple-50 rounded-lg transition-colors">
+              <button
+                onClick={signInNavigateHandler}
+                className="w-full px-6 py-3 text-gray-700 font-semibold hover:bg-purple-50 rounded-lg transition-colors">
                 Sign In
               </button>
               <button className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-semibold shadow-lg">

@@ -7,6 +7,7 @@ import { UserAuthPage } from './Features/User/Pages/UserAuth.tsx'
 import { LandingPage } from './Features/LandingPage/Pages/LandingPage.tsx'
 import { MenuCreationPage } from './Features/Menu/Pages/MenuCreation.tsx'
 import { RouteAuthProvider } from './Features/RouteAuthProvider.tsx'
+import { MenuBuilderPage } from './Features/MenuBuilder/Pages/MenuBuilderPage.tsx'
 
 
 const routes = createBrowserRouter(
@@ -17,9 +18,11 @@ const routes = createBrowserRouter(
         {/*Public Routes*/}
         <Route path="/" element={<LandingPage />} />
         <Route path="login" element={<UserAuthPage />} />
+
         {/*Protected Routes*/}
         <Route element={<RouteAuthProvider />}>
           <Route path="dashboard" element={<MenuCreationPage />} />
+          <Route path="menu/:id" element={<MenuBuilderPage />} />
         </Route>
       </Route>
     </>

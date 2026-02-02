@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header } from '../../Header/Header';
 import { Footer } from '../../Footer/Footer';
 import { MenuCreationBox } from './MenuBox';
 import { MenuCard } from './MenuCard';
 import type { Menu } from './MenuCard';
-import { addMenu } from '../Api/MenuApi';
+import { addMenu, fetchAllMenus } from '../Api/MenuApi';
+import { Link } from 'react-router-dom';
 
 type addMenuResponseType = {
   data: {
@@ -12,8 +13,18 @@ type addMenuResponseType = {
   }
 }
 export const MenuCreationPage: React.FC = () => {
+
   // State to hold existing menus - you'll fetch this from backend
   const [menus, setMenus] = useState<Menu[]>([]);
+  useEffect(() => {
+    const menu = async () => {
+      const fetchAllMenuResponse = await fetchAllMenus();
+      console.log("All menus list: ", fetchAllMenuResponse.data);
+      console.log(fetchAllMenuResponse.data.data.menuList);
+      setMenus(fetchAllMenuResponse.data.data.menuList)
+    }
+    menu()
+  }, [])
 
   // Handler for menu creation - you'll replace this with actual backend call
   const handleCreateMenu = async (menuName: string, creationDate: string) => {
@@ -165,11 +176,14 @@ export const MenuCreationPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
             {/* Existing Menu Cards */}
             {menus.map((menu, index) => (
-              <MenuCard
-                key={index}
-                menu={menu}
-                onMenuClick={handleMenuClick}
-              />
+              <Link to={`/menu/${menu._id}`}>
+                <MenuCard
+                  key={index}
+                  menu={menu}
+                  onMenuClick={handleMenuClick}
+                />
+              </Link>
+
             ))}
 
             {/* Create New Menu Box */}

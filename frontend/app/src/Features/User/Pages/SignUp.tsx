@@ -11,10 +11,10 @@ export const SignupForm: React.FC = () => {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const { signup, toggleMode } = useAuthStore();
 
+  const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const navigate = useNavigate();
 
     const formData: registerUserType = {
       email: email,
