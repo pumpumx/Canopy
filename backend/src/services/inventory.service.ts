@@ -46,10 +46,7 @@ type fetchAllMenusResponseType = {
 }
 export const fetchAllMenusService = async (user: userDecodedToken): Promise<fetchAllMenusResponseType> => {
 
-  const menuList: Menu[] = await Menu.aggregate([
-    { $match: { user: user.userId } },
-    { $project: { menuName: 1 } },
-  ]);
+  const menuList: Menu[] = await Menu.find({ user: user.userId }).select("menuName createdAt updatedAt");
 
   console.log("Menu List:", menuList)
 

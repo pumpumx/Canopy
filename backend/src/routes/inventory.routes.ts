@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { addCategory, addItem, createMenu, deleteCategory, deleteItem, editCategoryName, editItem, fetchCompleteMenu } from "src/controllers/inventory.controller";
+import { addCategory, addItem, createMenu, deleteCategory, deleteItem, editCategoryName, editItem, fetchAllMenus, fetchCompleteMenu } from "src/controllers/inventory.controller";
 import { verifyJWT } from "src/middlewares/verifyJWT";
 
 
@@ -34,6 +34,6 @@ inventoryRouter.route(`${inventoryRouterConfig.deleteItem}`).delete(verifyJWT, d
 //All data fetching api's , used for data fetching to the frontend 
 
 inventoryRouter.route(`${inventoryRouterConfig.fetchMenu}`).get(verifyJWT, fetchCompleteMenu)
-inventoryRouter.route(`${inventoryRouterConfig.fetchAllMenus}`).get(verifyJWT, fetchCompleteMenu)
+inventoryRouter.route(`${inventoryRouterConfig.fetchAllMenus}`).get(verifyJWT, fetchAllMenus)
 
 

@@ -28,7 +28,6 @@ const itemSchema = new Schema<itemType>({
     type: Number,
     required: true,
     default: 0
-
   },
   popularityScore: {
     type: Number,
@@ -71,9 +70,9 @@ const menuSchema = new Schema<menuType>({
   },
 }, { timestamps: true })
 
-menuSchema.index({ menuName: 1 }, { unique: true })
-categorySchema.index({ categoryName: 1, menuId: 1 }, { unique: true })
-itemSchema.index({ itemName: 1 }, { unique: true })
+menuSchema.index({ menuName: 1, user: 1 }, { unique: true })
+categorySchema.index({ categoryName: 1 })
+itemSchema.index({ itemName: 1 })
 
 export const Category = mongoose.model("Category", categorySchema);
 export const Item = mongoose.model("Item", itemSchema);

@@ -42,7 +42,7 @@ export const fetchAllMenus = asyncHandler(async (req: Request, res: Response) =>
   const fetchAllMenusResponse = await fetchAllMenusService(user);
 
   return res.status(200).json(
-    new ApiResponse(200, "Menus Fetched Successfully", { fetchAllMenusResponse })
+    new ApiResponse(200, "Menus Fetched Successfully", { data: fetchAllMenusResponse })
   )
 })
 
